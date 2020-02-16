@@ -21,3 +21,10 @@ communication.
 Docker containers = good for almost all project sizes
 Microservices = good for big companies with a lot of code and people
 Sweetspot = Monolith app and databases in containers
+
+
+in my micro example 
+
+front end is served with nginx, nginx forward requests to RabbitMQ Server 
+the client received the sent messages using one direction communication channel (SSE)
+

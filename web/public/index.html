@@ -13,28 +13,50 @@
       right: 100px;
     }
   </style>
+  <script src='javascripts/sse.js'></script>
 </head>
 
 <body>
-  <h1>Create books</h1>
-  <form onsubmit="return API.saveBook()">
-    <input id="bookname" type="text">
+<!--  <h1>Create books</h1>-->
+<!--  <form onsubmit="return API.saveBook()">-->
+<!--    <input id="bookname" type="text">-->
+<!--    <input type="submit" value="submit">-->
+<!--  </form>-->
+<!--  <h1>Create videos</h1>-->
+<!--  <form onsubmit="return API.saveVideo()">-->
+<!--    <input id="videoname" type="text">-->
+<!--    <input type="submit" value="submit">-->
+<!--  </form>-->
+<!--  <h1>Search</h1>-->
+<!--  <form onsubmit="return API.search()">-->
+<!--    <input id="search" type="text">-->
+<!--    <input type="submit" value="submit">-->
+<!--  </form>-->
+<!--  <ul id="matches"></ul>-->
+<!--  <br>-->
+  <h1>Send to RabbitMQ (RPC!)</h1>
+  <form onsubmit="return API.sendMessage()">
+    <input id="message" type="text">
     <input type="submit" value="submit">
   </form>
-  <h1>Create videos</h1>
-  <form onsubmit="return API.saveVideo()">
-    <input id="videoname" type="text">
-    <input type="submit" value="submit">
-  </form>
-  <h1>Search</h1>
-  <form onsubmit="return API.search()">
-    <input id="search" type="text">
-    <input type="submit" value="submit">
-  </form>
-  <ul id="matches"></ul>
+
+  <h1>Messaged recieved back using SSE</h1>
+  <div id="content"></div>
+
   <script>
     const API = (() => {
       const makeSaveFunc = (selector, postNameFunc) => () => {
+        try {
+          const val = document.querySelector(selector).value;
+          postNameFunc(val);
+        } catch (e) {
+          console.log(e);
+          console.log('--------------------------');
+        }
+        return false;
+      };
+
+      const makeMessageFunc = (selector, postNameFunc) => () => {
         try {
           const val = document.querySelector(selector).value;
           postNameFunc(val);
@@ -55,9 +77,46 @@
           }
         });
       };
+      const postMessageFunc = uri => val => {
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("message", val);
+
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: urlencoded,
+          redirect: 'follow'
+        };
+
+
+        fetch(uri, requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+
+        // var urlencoded = new URLSearchParams();
+        // urlencoded.append("message", val);
+        // console.log( 'postMessageFunc',urlencoded)
+        //
+        // fetch(uri, {
+        //   method: 'POST',
+        //   body: urlencoded,
+        //   headers: {
+        //       // 'Accept': 'application/json',
+        //     'Content-Type': 'application/x-www-form-urlencode'
+        //   }
+        // })
+        //
+        // ;
+      };
 
       const postVideoName = makePostNameFunc("http://localhost:8080/api/v1/videos");
       const postBookName = makePostNameFunc("http://localhost:8080/api/v1/books");
+      const postToRabbitMQ = postMessageFunc("http://localhost:8080/message"); // later change for 8080 via API gateway
 
       const search = () => {
         try {
@@ -86,8 +145,10 @@
       return {
         saveVideo: makeSaveFunc("#videoname", postVideoName),
         saveBook: makeSaveFunc("#bookname", postBookName),
-        search
-      }
+        search,
+        sendMessage: makeMessageFunc('#message', postToRabbitMQ)
+
+    }
     })();
   </script>
 </body>
