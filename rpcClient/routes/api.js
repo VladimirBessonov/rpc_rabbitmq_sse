@@ -16,7 +16,14 @@ rpcClient.createClient(setting).then( ch => {
     channel = ch;
      rpcClient.consumeMessage(ch, savetoStorage)
 
-});
+
+    })
+    .catch( e => {
+        console.log(e)
+            process.exit(1);
+
+        }
+        );
 
 router.post('/', function(req, res, next) {
     let message = req.body.message

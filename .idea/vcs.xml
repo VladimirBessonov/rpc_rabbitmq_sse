@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/docker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/examples/docker" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/examples/microservices-example_original" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/examples/rabbitmq-tutorials" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/examples/rabbitmq-with-expressjs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/microservices-example" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/microservices-example_original" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rabbitmq-tutorials" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rabbitmq-with-expressjs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rubbitmq/rabbitmq-with-expressjs" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/sse_example/node-sse-example" vcs="Git" />
+  </component>
+</project>

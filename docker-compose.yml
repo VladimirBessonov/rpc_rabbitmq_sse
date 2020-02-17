@@ -32,6 +32,7 @@ services:
 #      - "rabbit"
     depends_on:
       - rabbit
+    restart: on-failure
 
 
 
@@ -45,6 +46,7 @@ services:
 #      - "rabbit"
     depends_on:
       - rabbit
+    restart: on-failure
 
   nginx:
     image: nginx:latest
